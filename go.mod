@@ -1,4 +1,4 @@
-module github.com/terraform-in-action/terraform-provider-petstore/go-petstore
+module github.com/terraform-in-action/go-petstore
 
 go 1.14
 
