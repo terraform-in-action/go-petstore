@@ -1,0 +1,174 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Swagger Petstore
+  license:
+    name: MIT
+servers:
+  - url: https://g6pny6dke9.execute-api.us-west-2.amazonaws.com/v1/api
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      operationId: listPets
+      tags:
+        - pets
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (default 100)
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: An array of pets
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PetList"    
+    post:
+      summary: Create a Pet
+      operationId: createPet
+      tags:
+        - pets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePetRequest'
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+        '400':
+          description: "Bad Request"
+        '500':
+            description: "Internal Server Error"
+
+  /pets/{petId}:
+    get:
+      summary: Info for a specific pet
+      operationId: showPetById
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: The id of the pet to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+        '404':
+           description: "Not found" 
+    delete:
+      summary: Delete a Pet
+      operationId: deletePetById
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: The id of the pet to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ok
+        '404':
+          description: "Not found"
+    patch:
+      summary: Update a pet
+      operationId: patchPetById
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: The id of the pet to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePetRequest'
+      responses:
+        '200':
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+        '400':
+            description: "Bad Request"
+        '404':
+          description: "Not found"
+        '500':
+          description: "Internal Server Error"
+components:
+  schemas:
+    Pet:
+      required:
+        - id
+        - name
+        - species
+        - age
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        species:
+          type: string
+        age:
+          type: integer
+    PetList:
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Pet"
+    CreatePetRequest:
+      required:
+        - name
+        - species
+        - age
+      properties:
+        name:
+          type: string
+        species:
+          type: string
+        age:
+          type: integer
+    UpdatePetRequest:
+      required:
+        - name
+        - species
+        - age
+      properties:
+        name:
+          type: string
+        species:
+          type: string
+        age:
+          type: integer
+
+
