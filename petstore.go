@@ -179,6 +179,11 @@ func (c *Client) do(ctx context.Context, req *http.Request, v interface{}) error
 	// Add the context to the request.
 	req = req.WithContext(ctx)
 	log.Printf("[DEBUG] go-petstore request: %v", req)
+	
+	// wake up the function?
+	tempReq, _ := c.newRequest("GET","pets",nil)
+	c.http.Do(tempReq)
+		  
 	// Execute the request and check the response.
 	resp, err := c.http.Do(req)
 	if err != nil {
