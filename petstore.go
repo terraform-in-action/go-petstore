@@ -152,10 +152,7 @@ func (c *Client) newRequest(method, path string, v interface{}) (*http.Request, 
 			body = bytes.NewReader(dat)
 		}
 	}
-	//wake up lambda function
-	http.NewRequest("GET", u.String(), body)
 	
-	//perform original request
 	req, err := http.NewRequest(method, u.String(), body)
 	if err != nil {
 		return nil, err
@@ -200,7 +197,7 @@ func (c *Client) do(ctx context.Context, req *http.Request, v interface{}) error
 	if err := checkResponseCode(resp); err != nil {
 		//retryable error
 		if err == ErrGatewayTimeout {
-			return c.do(ctx, req, v)
+			resp, err = c.http.Do(req)
 		}
 		return err
 	}
